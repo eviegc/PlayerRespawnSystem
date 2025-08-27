@@ -1,6 +1,6 @@
-﻿using RoR2;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using RoR2;
 using UnityEngine;
 
 namespace PlayerRespawnSystem
@@ -12,7 +12,8 @@ namespace PlayerRespawnSystem
 
         private MultiUserTimers userRespawnTimers;
 
-        public IReadOnlyDictionary<NetworkUserId, UserTimer> UserRespawnTimers => userRespawnTimers.UserTimers;
+        public IReadOnlyDictionary<NetworkUserId, UserTimer> UserRespawnTimers =>
+            userRespawnTimers.UserTimers;
 
         public void StartRespawnTimer(NetworkUser user)
         {
@@ -60,7 +61,8 @@ namespace PlayerRespawnSystem
         {
             IsActive = true;
             userRespawnTimers = gameObject.AddComponent<MultiUserTimers>();
-            userRespawnTimers.OnUserTimerEndInFiveSeconds += UserRespawnTimers_OnUserTimerEndInFiveSeconds;
+            userRespawnTimers.OnUserTimerEndInFiveSeconds +=
+                UserRespawnTimers_OnUserTimerEndInFiveSeconds;
             userRespawnTimers.OnUserTimerEnd += UsersRespawnTimers_OnUserTimerRespawnTimerEnd;
 
             On.RoR2.Run.OnUserAdded += Run_OnUserAdded;
@@ -68,7 +70,8 @@ namespace PlayerRespawnSystem
             On.RoR2.Run.BeginGameOver += Run_BeginGameOver;
             On.RoR2.Run.OnDestroy += Run_OnDestroy;
 
-            On.RoR2.PlayerCharacterMasterController.OnBodyDeath += PlayerCharacterMasterController_OnBodyDeath;
+            On.RoR2.PlayerCharacterMasterController.OnBodyDeath +=
+                PlayerCharacterMasterController_OnBodyDeath;
             On.RoR2.CharacterMaster.Respawn += CharacterMaster_Respawn;
             On.RoR2.Run.OnServerSceneChanged += Run_OnServerSceneChanged;
             On.RoR2.Stage.BeginAdvanceStage += Stage_BeginAdvanceStage;
@@ -76,7 +79,8 @@ namespace PlayerRespawnSystem
 
         public void OnDestroy()
         {
-            userRespawnTimers.OnUserTimerEndInFiveSeconds -= UserRespawnTimers_OnUserTimerEndInFiveSeconds;
+            userRespawnTimers.OnUserTimerEndInFiveSeconds -=
+                UserRespawnTimers_OnUserTimerEndInFiveSeconds;
             userRespawnTimers.OnUserTimerEnd -= UsersRespawnTimers_OnUserTimerRespawnTimerEnd;
             Destroy(userRespawnTimers);
 
@@ -85,7 +89,8 @@ namespace PlayerRespawnSystem
             On.RoR2.Run.BeginGameOver -= Run_BeginGameOver;
             On.RoR2.Run.OnDestroy -= Run_OnDestroy;
 
-            On.RoR2.PlayerCharacterMasterController.OnBodyDeath -= PlayerCharacterMasterController_OnBodyDeath;
+            On.RoR2.PlayerCharacterMasterController.OnBodyDeath -=
+                PlayerCharacterMasterController_OnBodyDeath;
             On.RoR2.CharacterMaster.Respawn -= CharacterMaster_Respawn;
             On.RoR2.Run.OnServerSceneChanged -= Run_OnServerSceneChanged;
             On.RoR2.Stage.BeginAdvanceStage -= Stage_BeginAdvanceStage;
@@ -108,14 +113,22 @@ namespace PlayerRespawnSystem
             userRespawnTimers.AddTimer(user.id);
         }
 
-        private void Run_OnUserRemoved(On.RoR2.Run.orig_OnUserRemoved orig, Run self, NetworkUser user)
+        private void Run_OnUserRemoved(
+            On.RoR2.Run.orig_OnUserRemoved orig,
+            Run self,
+            NetworkUser user
+        )
         {
             orig(self, user);
 
             userRespawnTimers.RemoveTimer(user.id);
         }
 
-        private void Run_BeginGameOver(On.RoR2.Run.orig_BeginGameOver orig, Run self, GameEndingDef gameEndingDef)
+        private void Run_BeginGameOver(
+            On.RoR2.Run.orig_BeginGameOver orig,
+            Run self,
+            GameEndingDef gameEndingDef
+        )
         {
             orig(self, gameEndingDef);
 
@@ -129,7 +142,10 @@ namespace PlayerRespawnSystem
             userRespawnTimers.ClearTimers();
         }
 
-        private void PlayerCharacterMasterController_OnBodyDeath(On.RoR2.PlayerCharacterMasterController.orig_OnBodyDeath orig, PlayerCharacterMasterController self)
+        private void PlayerCharacterMasterController_OnBodyDeath(
+            On.RoR2.PlayerCharacterMasterController.orig_OnBodyDeath orig,
+            PlayerCharacterMasterController self
+        )
         {
             orig(self);
 
@@ -140,7 +156,13 @@ namespace PlayerRespawnSystem
             }
         }
 
-        private CharacterBody CharacterMaster_Respawn(On.RoR2.CharacterMaster.orig_Respawn orig, CharacterMaster self, Vector3 footPosition, Quaternion rotation, bool wasRevivedMidStage)
+        private CharacterBody CharacterMaster_Respawn(
+            On.RoR2.CharacterMaster.orig_Respawn orig,
+            CharacterMaster self,
+            Vector3 footPosition,
+            Quaternion rotation,
+            bool wasRevivedMidStage
+        )
         {
             var user = UsersHelper.GetUser(self);
             if (user)
@@ -151,7 +173,11 @@ namespace PlayerRespawnSystem
             return orig(self, footPosition, rotation, wasRevivedMidStage);
         }
 
-        private void Run_OnServerSceneChanged(On.RoR2.Run.orig_OnServerSceneChanged orig, Run self, string sceneName)
+        private void Run_OnServerSceneChanged(
+            On.RoR2.Run.orig_OnServerSceneChanged orig,
+            Run self,
+            string sceneName
+        )
         {
             orig(self, sceneName);
 
@@ -164,7 +190,11 @@ namespace PlayerRespawnSystem
             }
         }
 
-        private void Stage_BeginAdvanceStage(On.RoR2.Stage.orig_BeginAdvanceStage orig, Stage self, SceneDef destinationStage)
+        private void Stage_BeginAdvanceStage(
+            On.RoR2.Stage.orig_BeginAdvanceStage orig,
+            Stage self,
+            SceneDef destinationStage
+        )
         {
             orig(self, destinationStage);
 
@@ -174,21 +204,33 @@ namespace PlayerRespawnSystem
 
         private bool CheckIfCurrentStageIsIgnoredForTimedRespawn()
         {
-            return PluginConfig.IgnoredMapsForTimedRespawn.Value.Contains(SceneCatalog.GetSceneDefForCurrentScene().baseSceneName);
+            return PluginConfig.IgnoredMapsForTimedRespawn.Value.Contains(
+                SceneCatalog.GetSceneDefForCurrentScene().baseSceneName
+            );
         }
 
-        public override bool GetRespawnTransform(RoR2.CharacterBody body, out Transform outRespawnTransform)
+        public override bool GetRespawnTransform(
+            RoR2.CharacterBody body,
+            out Transform outRespawnTransform
+        )
         {
-            foreach(RespawnType respawnType in Enum.GetValues(typeof(RespawnType)))
+            foreach (RespawnType respawnType in Enum.GetValues(typeof(RespawnType)))
             {
                 if (respawnType == RespawnType.Timed)
                 {
                     continue;
                 }
 
-                if (PlayerRespawnSystem.instance.RespawnControllers.TryGetValue(respawnType, out RespawnController respawnController) && respawnController.IsActive)
+                if (
+                    PlayerRespawnSystem.instance.RespawnControllers.TryGetValue(
+                        respawnType,
+                        out RespawnController respawnController
+                    ) && respawnController.IsActive
+                )
                 {
-                    PlayerRespawnSystemPlugin.Log.LogDebug($"Timed respawn using {respawnController.GetRespawnType()} respawn position");
+                    PlayerRespawnSystemPlugin.Log.LogDebug(
+                        $"Timed respawn using {respawnController.GetRespawnType()} respawn position"
+                    );
                     return respawnController.GetRespawnTransform(body, out outRespawnTransform);
                 }
             }

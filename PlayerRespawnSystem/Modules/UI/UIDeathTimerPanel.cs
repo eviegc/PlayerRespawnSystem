@@ -70,17 +70,35 @@ namespace PlayerRespawnSystem
 
         public void FixedUpdate()
         {
-            if (show && textContext1.fontSize != fontSize && textContext2.fontSize != fontSize && colorRectTransform.localScale != Vector3.one)
+            if (
+                show
+                && textContext1.fontSize != fontSize
+                && textContext2.fontSize != fontSize
+                && colorRectTransform.localScale != Vector3.one
+            )
             {
                 textContext1.fontSize = Mathf.Lerp(textContext1.fontSize, fontSize, showSpeed);
                 textContext2.fontSize = Mathf.Lerp(textContext2.fontSize, fontSize, showSpeed);
-                colorRectTransform.localScale = Vector2.Lerp(colorRectTransform.localScale, Vector3.one, showSpeed);
+                colorRectTransform.localScale = Vector2.Lerp(
+                    colorRectTransform.localScale,
+                    Vector3.one,
+                    showSpeed
+                );
             }
-            else if (!show && textContext1.fontSize != 0 && textContext2.fontSize != 0 && colorRectTransform.localScale != Vector3.up)
+            else if (
+                !show
+                && textContext1.fontSize != 0
+                && textContext2.fontSize != 0
+                && colorRectTransform.localScale != Vector3.up
+            )
             {
                 textContext1.fontSize = Mathf.Lerp(textContext1.fontSize, 0, hideSpeed);
                 textContext2.fontSize = Mathf.Lerp(textContext2.fontSize, 0, hideSpeed);
-                colorRectTransform.localScale = Vector2.Lerp(colorRectTransform.localScale, Vector3.up, hideSpeed);
+                colorRectTransform.localScale = Vector2.Lerp(
+                    colorRectTransform.localScale,
+                    Vector3.up,
+                    hideSpeed
+                );
             }
         }
     }

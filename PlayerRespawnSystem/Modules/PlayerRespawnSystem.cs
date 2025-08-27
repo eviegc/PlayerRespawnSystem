@@ -1,5 +1,5 @@
-﻿using RoR2;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using RoR2;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -9,8 +9,10 @@ namespace PlayerRespawnSystem
     {
         public static PlayerRespawnSystem instance { get; private set; }
 
-        private Dictionary<RespawnType, RespawnController> respawnControllers = new Dictionary<RespawnType, RespawnController>();
-        public IReadOnlyDictionary<RespawnType, RespawnController> RespawnControllers => respawnControllers;
+        private Dictionary<RespawnType, RespawnController> respawnControllers =
+            new Dictionary<RespawnType, RespawnController>();
+        public IReadOnlyDictionary<RespawnType, RespawnController> RespawnControllers =>
+            respawnControllers;
 
         private PlayerRespawner playerRespawner;
 
@@ -23,7 +25,8 @@ namespace PlayerRespawnSystem
         {
             if (respawnControllers.ContainsKey(RespawnType.Timed))
             {
-                var timedRespawnController = respawnControllers[RespawnType.Timed] as TimedRespawnController;
+                var timedRespawnController =
+                    respawnControllers[RespawnType.Timed] as TimedRespawnController;
                 timedRespawnController.StopAllRespawnTimers();
             }
         }
@@ -32,39 +35,56 @@ namespace PlayerRespawnSystem
         {
             if (respawnControllers.ContainsKey(RespawnType.Timed))
             {
-                var timedRespawnController = respawnControllers[RespawnType.Timed] as TimedRespawnController;
+                var timedRespawnController =
+                    respawnControllers[RespawnType.Timed] as TimedRespawnController;
                 timedRespawnController.ResumeAllRespawnTimers();
             }
         }
 
         protected void OnEnable()
         {
-            PlayerRespawnSystem.instance = SingletonHelper.Assign<PlayerRespawnSystem>(PlayerRespawnSystem.instance, this);
+            PlayerRespawnSystem.instance = SingletonHelper.Assign<PlayerRespawnSystem>(
+                PlayerRespawnSystem.instance,
+                this
+            );
         }
 
         protected void OnDisable()
         {
-            PlayerRespawnSystem.instance = SingletonHelper.Unassign<PlayerRespawnSystem>(PlayerRespawnSystem.instance, this);
+            PlayerRespawnSystem.instance = SingletonHelper.Unassign<PlayerRespawnSystem>(
+                PlayerRespawnSystem.instance,
+                this
+            );
         }
 
         public void Awake()
         {
             playerRespawner = gameObject.AddComponent<PlayerRespawner>();
 
-            foreach (var (respawnType, respawnControllerType) in RespawnController.GetRespawnControllerTypes())
+            foreach (
+                var (
+                    respawnType,
+                    respawnControllerType
+                ) in RespawnController.GetRespawnControllerTypes()
+            )
             {
                 if (RespawnController.IsEnabled(respawnControllerType))
                 {
-                    PlayerRespawnSystemPlugin.Log.LogDebug($"Enabling {respawnType} respawn controller");
-                    respawnControllers[respawnType] = (RespawnController)gameObject.AddComponent(respawnControllerType);
+                    PlayerRespawnSystemPlugin.Log.LogDebug(
+                        $"Enabling {respawnType} respawn controller"
+                    );
+                    respawnControllers[respawnType] = (RespawnController)
+                        gameObject.AddComponent(respawnControllerType);
                     respawnControllers[respawnType].Init(playerRespawner);
                     respawnControllers[respawnType].OnRequestTimedRespawnBlock += BlockTimedRespawn;
-                    respawnControllers[respawnType].OnRequestTimedRespawnUnblock += UnblockTimedRespawn;
+                    respawnControllers[respawnType].OnRequestTimedRespawnUnblock +=
+                        UnblockTimedRespawn;
                 }
             }
 
             On.RoR2.Stage.OnEnable += Stage_OnEnable;
-            On.RoR2.PlayerCharacterMasterController.OnBodyDeath += PlayerCharacterMasterController_OnBodyDeath;
+            On.RoR2.PlayerCharacterMasterController.OnBodyDeath +=
+                PlayerCharacterMasterController_OnBodyDeath;
             On.RoR2.SceneExitController.SetState += SceneExitController_SetState;
             On.RoR2.Run.OnServerSceneChanged += Run_OnServerSceneChanged;
         }
@@ -82,7 +102,8 @@ namespace PlayerRespawnSystem
             Destroy(playerRespawner);
 
             On.RoR2.Stage.OnEnable -= Stage_OnEnable;
-            On.RoR2.PlayerCharacterMasterController.OnBodyDeath -= PlayerCharacterMasterController_OnBodyDeath;
+            On.RoR2.PlayerCharacterMasterController.OnBodyDeath -=
+                PlayerCharacterMasterController_OnBodyDeath;
             On.RoR2.SceneExitController.SetState -= SceneExitController_SetState;
             On.RoR2.Run.OnServerSceneChanged -= Run_OnServerSceneChanged;
         }
@@ -97,7 +118,10 @@ namespace PlayerRespawnSystem
             }
         }
 
-        private void PlayerCharacterMasterController_OnBodyDeath(On.RoR2.PlayerCharacterMasterController.orig_OnBodyDeath orig, PlayerCharacterMasterController self)
+        private void PlayerCharacterMasterController_OnBodyDeath(
+            On.RoR2.PlayerCharacterMasterController.orig_OnBodyDeath orig,
+            PlayerCharacterMasterController self
+        )
         {
             orig(self);
 
@@ -106,19 +130,31 @@ namespace PlayerRespawnSystem
                 var user = UsersHelper.GetUser(self.master);
                 if (user && !respawnControllers[RespawnType.Timed].IsActive)
                 {
-                    if (IsRespawnControllerEnabledAndActive(RespawnType.Teleporter) && PluginConfig.RespawnOnTPEnd.Value)
+                    if (
+                        IsRespawnControllerEnabledAndActive(RespawnType.Teleporter)
+                        && PluginConfig.RespawnOnTPEnd.Value
+                    )
                     {
                         ChatHelper.UserWillRespawnAfterTPEvent(user.userName);
                     }
-                    if (IsRespawnControllerEnabledAndActive(RespawnType.Mithrix) && PluginConfig.RespawnOnMithrixEnd.Value)
+                    if (
+                        IsRespawnControllerEnabledAndActive(RespawnType.Mithrix)
+                        && PluginConfig.RespawnOnMithrixEnd.Value
+                    )
                     {
                         ChatHelper.UserWillRespawnAfterMithrixFight(user.userName);
                     }
-                    if (IsRespawnControllerEnabledAndActive(RespawnType.Voidling) && PluginConfig.RespawnOnVoidlingEnd.Value)
+                    if (
+                        IsRespawnControllerEnabledAndActive(RespawnType.Voidling)
+                        && PluginConfig.RespawnOnVoidlingEnd.Value
+                    )
                     {
                         ChatHelper.UserWillRespawnAfterVoidlingFight(user.userName);
                     }
-                    if (IsRespawnControllerEnabledAndActive(RespawnType.FalseSon) && PluginConfig.RespawnOnFalseSonEnd.Value)
+                    if (
+                        IsRespawnControllerEnabledAndActive(RespawnType.FalseSon)
+                        && PluginConfig.RespawnOnFalseSonEnd.Value
+                    )
                     {
                         ChatHelper.UserWillRespawnAfterFalseSonFight(user.userName);
                     }
@@ -126,7 +162,11 @@ namespace PlayerRespawnSystem
             }
         }
 
-        private void SceneExitController_SetState(On.RoR2.SceneExitController.orig_SetState orig, SceneExitController self, SceneExitController.ExitState newState)
+        private void SceneExitController_SetState(
+            On.RoR2.SceneExitController.orig_SetState orig,
+            SceneExitController self,
+            SceneExitController.ExitState newState
+        )
         {
             orig(self, newState);
 
@@ -136,7 +176,11 @@ namespace PlayerRespawnSystem
             }
         }
 
-        private void Run_OnServerSceneChanged(On.RoR2.Run.orig_OnServerSceneChanged orig, Run self, string sceneName)
+        private void Run_OnServerSceneChanged(
+            On.RoR2.Run.orig_OnServerSceneChanged orig,
+            Run self,
+            string sceneName
+        )
         {
             orig(self, sceneName);
 
@@ -145,7 +189,8 @@ namespace PlayerRespawnSystem
 
         private bool IsRespawnControllerEnabledAndActive(RespawnType respawnType)
         {
-            return respawnControllers.ContainsKey(respawnType) && respawnControllers[respawnType].IsActive;
+            return respawnControllers.ContainsKey(respawnType)
+                && respawnControllers[respawnType].IsActive;
         }
     }
 }

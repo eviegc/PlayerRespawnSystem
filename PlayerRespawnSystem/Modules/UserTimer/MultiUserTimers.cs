@@ -1,5 +1,5 @@
-﻿using RoR2;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using RoR2;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -7,7 +7,8 @@ namespace PlayerRespawnSystem
 {
     class MultiUserTimers : MonoBehaviour
     {
-        private Dictionary<NetworkUserId, UserTimer> userTimers = new Dictionary<NetworkUserId, UserTimer>();
+        private Dictionary<NetworkUserId, UserTimer> userTimers =
+            new Dictionary<NetworkUserId, UserTimer>();
         public IReadOnlyDictionary<NetworkUserId, UserTimer> UserTimers => userTimers;
 
         public delegate void UserTimerEndInFiveSeconds(NetworkUser user);

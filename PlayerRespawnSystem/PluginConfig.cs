@@ -4,21 +4,17 @@ namespace PlayerRespawnSystem
 {
     public static class PluginConfig
     {
-        public static ConfigEntry<string>
-            IgnoredMapsForTimedRespawn,
+        public static ConfigEntry<string> IgnoredMapsForTimedRespawn,
             IgnoredGameModes;
 
-        public static ConfigEntry<RespawnTimeType>
-            RespawnTimeType;
+        public static ConfigEntry<RespawnTimeType> RespawnTimeType;
 
-        public static ConfigEntry<uint>
-            StartingRespawnTime,
+        public static ConfigEntry<uint> StartingRespawnTime,
             MaxRespawnTime,
             UpdateCurrentRespawnTimeEveryXSeconds,
             UpdateCurrentRepsawnTimeByXSeconds;
 
-        public static ConfigEntry<bool>
-            UsePodsOnStartOfMatch,
+        public static ConfigEntry<bool> UsePodsOnStartOfMatch,
             UseDeathTimerUI,
             UseTimedRespawn,
             BlockTimedRespawnOnTPEvent,

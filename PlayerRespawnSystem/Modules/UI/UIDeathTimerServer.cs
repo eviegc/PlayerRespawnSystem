@@ -26,7 +26,9 @@ namespace PlayerRespawnSystem
         {
             orig(self);
 
-            PlayerRespawnSystemPlugin.Log.LogDebug($"[Server] Starting UpdateAllDeathTimers() repeat");
+            PlayerRespawnSystemPlugin.Log.LogDebug(
+                $"[Server] Starting UpdateAllDeathTimers() repeat"
+            );
             InvokeRepeating("UpdateAllDeathTimers", 2.0f, UpdateUIEveryXSeconds);
         }
 
@@ -34,7 +36,9 @@ namespace PlayerRespawnSystem
         {
             orig(self);
 
-            PlayerRespawnSystemPlugin.Log.LogDebug($"[Server] Ending UpdateAllDeathTimers() repeat");
+            PlayerRespawnSystemPlugin.Log.LogDebug(
+                $"[Server] Ending UpdateAllDeathTimers() repeat"
+            );
             CancelInvoke("UpdateAllDeathTimers");
         }
 
@@ -42,12 +46,19 @@ namespace PlayerRespawnSystem
         {
             PlayerRespawnSystemPlugin.Log.LogDebug($"[Server] UpdateAllDeathTimers()");
 
-            if (PlayerRespawnSystem.instance && PlayerRespawnSystem.instance.RespawnControllers.ContainsKey(RespawnType.Timed))
+            if (
+                PlayerRespawnSystem.instance
+                && PlayerRespawnSystem.instance.RespawnControllers.ContainsKey(RespawnType.Timed)
+            )
             {
                 RespawnType activeRespawnType = RespawnType.Timed;
                 TimedRespawnController timedRespawnController = null;
 
-                foreach (var (respawnType, respawnController) in PlayerRespawnSystem.instance.RespawnControllers)
+                foreach (
+                    var (respawnType, respawnController) in PlayerRespawnSystem
+                        .instance
+                        .RespawnControllers
+                )
                 {
                     if (respawnController is TimedRespawnController)
                     {
@@ -64,17 +75,33 @@ namespace PlayerRespawnSystem
                     foreach (var user in NetworkUser.readOnlyInstancesList)
                     {
                         var conn = user.connectionToClient;
-                        if (conn == null || !conn.isReady) continue;
+                        if (conn == null || !conn.isReady)
+                            continue;
 
-                        if (timedRespawnController.UserRespawnTimers.TryGetValue(user.id, out var userTimer))
+                        if (
+                            timedRespawnController.UserRespawnTimers.TryGetValue(
+                                user.id,
+                                out var userTimer
+                            )
+                        )
                         {
                             float respawnTime = userTimer.TimeRemaining;
-                            bool canRespawn = PlayerRespawnSystem.instance.CheckIfUserCanBeRespawned(user);
+                            bool canRespawn =
+                                PlayerRespawnSystem.instance.CheckIfUserCanBeRespawned(user);
                             bool canTimedRespawn = canRespawn && timedRespawnController.IsActive;
 
-                            PlayerRespawnSystemPlugin.Log.LogDebug($"[Server] TargetUpdateDeathTimer(id={user.id.strValue}, respawnTime={respawnTime}, canRespawn={canRespawn}, canTimedRespawn={canTimedRespawn}, activeRespawnType={activeRespawnType})");
+                            PlayerRespawnSystemPlugin.Log.LogDebug(
+                                $"[Server] TargetUpdateDeathTimer(id={user.id.strValue}, respawnTime={respawnTime}, canRespawn={canRespawn}, canTimedRespawn={canTimedRespawn}, activeRespawnType={activeRespawnType})"
+                            );
 
-                            user.GetComponent<PlayerUIRpcProxy>().TargetUpdateDeathTimer(conn, respawnTime, canRespawn, canTimedRespawn, activeRespawnType);
+                            user.GetComponent<PlayerUIRpcProxy>()
+                                .TargetUpdateDeathTimer(
+                                    conn,
+                                    respawnTime,
+                                    canRespawn,
+                                    canTimedRespawn,
+                                    activeRespawnType
+                                );
                         }
                     }
                 }

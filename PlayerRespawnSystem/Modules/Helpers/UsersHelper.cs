@@ -1,5 +1,5 @@
-﻿using RoR2;
-using System.Linq;
+﻿using System.Linq;
+using RoR2;
 
 namespace PlayerRespawnSystem
 {

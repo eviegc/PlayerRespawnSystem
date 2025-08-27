@@ -22,37 +22,43 @@
 
         public static void UserWillRespawnAfterTPEvent(string userName)
         {
-            var message = $"<color=#{GreenColor}>{userName}</color> <color=#{GrayColor}>will respawn after teleporter event</color>";
+            var message =
+                $"<color=#{GreenColor}>{userName}</color> <color=#{GrayColor}>will respawn after teleporter event</color>";
             RoR2.Chat.SendBroadcastChat(new RoR2.Chat.SimpleChatMessage { baseToken = message });
         }
 
         public static void UserWillRespawnAfterMithrixFight(string userName)
         {
-            var message = $"<color=#{GreenColor}>{userName}</color> <color=#{GrayColor}>will respawn after mithrix fight</color>";
+            var message =
+                $"<color=#{GreenColor}>{userName}</color> <color=#{GrayColor}>will respawn after mithrix fight</color>";
             RoR2.Chat.SendBroadcastChat(new RoR2.Chat.SimpleChatMessage { baseToken = message });
         }
 
         public static void UserWillRespawnAfterArtifactTrial(string userName)
         {
-            var message = $"<color=#{GreenColor}>{userName}</color> <color=#{GrayColor}>will respawn after artifact trial</color>";
+            var message =
+                $"<color=#{GreenColor}>{userName}</color> <color=#{GrayColor}>will respawn after artifact trial</color>";
             RoR2.Chat.SendBroadcastChat(new RoR2.Chat.SimpleChatMessage { baseToken = message });
         }
 
         public static void UserWillRespawnAfterVoidlingFight(string userName)
         {
-            var message = $"<color=#{GreenColor}>{userName}</color> <color=#{GrayColor}>will respawn after voidling fight</color>";
+            var message =
+                $"<color=#{GreenColor}>{userName}</color> <color=#{GrayColor}>will respawn after voidling fight</color>";
             RoR2.Chat.SendBroadcastChat(new RoR2.Chat.SimpleChatMessage { baseToken = message });
         }
 
         public static void UserWillRespawnAfterFalseSonFight(string userName)
         {
-            var message = $"<color=#{GreenColor}>{userName}</color> <color=#{GrayColor}>will respawn after false son fight</color>";
+            var message =
+                $"<color=#{GreenColor}>{userName}</color> <color=#{GrayColor}>will respawn after false son fight</color>";
             RoR2.Chat.SendBroadcastChat(new RoR2.Chat.SimpleChatMessage { baseToken = message });
         }
 
         public static void UserWillRespawnAfter(string userName, uint respawnTime)
         {
-            var message = $"<color=#{GreenColor}>{userName}</color> <color=#{GrayColor}>will respawn in {respawnTime} seconds</color>";
+            var message =
+                $"<color=#{GreenColor}>{userName}</color> <color=#{GrayColor}>will respawn in {respawnTime} seconds</color>";
             RoR2.Chat.SendBroadcastChat(new RoR2.Chat.SimpleChatMessage { baseToken = message });
         }
     }

@@ -9,19 +9,24 @@ namespace PlayerRespawnSystem
 
         public void Awake()
         {
-            On.RoR2.ArtifactTrialMissionController.CombatState.OnEnter += ArtifactTrialMissionController_CombatState_OnEnter;
+            On.RoR2.ArtifactTrialMissionController.CombatState.OnEnter +=
+                ArtifactTrialMissionController_CombatState_OnEnter;
             On.RoR2.ArtifactTrialMissionController.CombatState.OnExit += CombatState_OnExit;
             On.RoR2.Run.AdvanceStage += Run_AdvanceStage;
         }
 
         public void OnDestroy()
         {
-            On.RoR2.ArtifactTrialMissionController.CombatState.OnEnter -= ArtifactTrialMissionController_CombatState_OnEnter;
+            On.RoR2.ArtifactTrialMissionController.CombatState.OnEnter -=
+                ArtifactTrialMissionController_CombatState_OnEnter;
             On.RoR2.ArtifactTrialMissionController.CombatState.OnExit -= CombatState_OnExit;
             On.RoR2.Run.AdvanceStage -= Run_AdvanceStage;
         }
 
-        private void ArtifactTrialMissionController_CombatState_OnEnter(On.RoR2.ArtifactTrialMissionController.CombatState.orig_OnEnter orig, ArtifactTrialMissionController.CombatState self)
+        private void ArtifactTrialMissionController_CombatState_OnEnter(
+            On.RoR2.ArtifactTrialMissionController.CombatState.orig_OnEnter orig,
+            ArtifactTrialMissionController.CombatState self
+        )
         {
             orig(self);
 
@@ -38,7 +43,10 @@ namespace PlayerRespawnSystem
             }
         }
 
-        private void CombatState_OnExit(On.RoR2.ArtifactTrialMissionController.CombatState.orig_OnExit orig, ArtifactTrialMissionController.CombatState self)
+        private void CombatState_OnExit(
+            On.RoR2.ArtifactTrialMissionController.CombatState.orig_OnExit orig,
+            ArtifactTrialMissionController.CombatState self
+        )
         {
             orig(self);
 
@@ -55,7 +63,11 @@ namespace PlayerRespawnSystem
             IsActive = false;
         }
 
-        private void Run_AdvanceStage(On.RoR2.Run.orig_AdvanceStage orig, RoR2.Run self, RoR2.SceneDef nextScene)
+        private void Run_AdvanceStage(
+            On.RoR2.Run.orig_AdvanceStage orig,
+            RoR2.Run self,
+            RoR2.SceneDef nextScene
+        )
         {
             orig(self, nextScene);
             IsActive = false;

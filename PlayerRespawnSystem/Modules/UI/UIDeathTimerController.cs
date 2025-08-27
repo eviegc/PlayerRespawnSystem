@@ -57,12 +57,19 @@ namespace PlayerRespawnSystem
         [Command]
         public void CmdUpdateAllDeathTimers()
         {
-            if (PlayerRespawnSystem.instance && PlayerRespawnSystem.instance.RespawnControllers.ContainsKey(RespawnType.Timed))
+            if (
+                PlayerRespawnSystem.instance
+                && PlayerRespawnSystem.instance.RespawnControllers.ContainsKey(RespawnType.Timed)
+            )
             {
                 RespawnType activeRespawnType = RespawnType.Timed;
                 TimedRespawnController timedRespawnController = null;
 
-                foreach (var (respawnType, respawnController) in PlayerRespawnSystem.instance.RespawnControllers)
+                foreach (
+                    var (respawnType, respawnController) in PlayerRespawnSystem
+                        .instance
+                        .RespawnControllers
+                )
                 {
                     if (respawnController is TimedRespawnController)
                     {
@@ -78,13 +85,25 @@ namespace PlayerRespawnSystem
                 {
                     foreach (var user in NetworkUser.readOnlyInstancesList)
                     {
-                        if (timedRespawnController.UserRespawnTimers.TryGetValue(user.id, out var userTimer))
+                        if (
+                            timedRespawnController.UserRespawnTimers.TryGetValue(
+                                user.id,
+                                out var userTimer
+                            )
+                        )
                         {
                             float respawnTime = userTimer.TimeRemaining;
-                            bool canRespawn = PlayerRespawnSystem.instance.CheckIfUserCanBeRespawned(user);
+                            bool canRespawn =
+                                PlayerRespawnSystem.instance.CheckIfUserCanBeRespawned(user);
                             bool canTimedRespawn = canRespawn && timedRespawnController.IsActive;
 
-                            TargetUpdateDeathTimer(user.connectionToClient, respawnTime, canRespawn, canTimedRespawn, activeRespawnType);
+                            TargetUpdateDeathTimer(
+                                user.connectionToClient,
+                                respawnTime,
+                                canRespawn,
+                                canTimedRespawn,
+                                activeRespawnType
+                            );
                         }
                     }
                 }
@@ -92,7 +111,13 @@ namespace PlayerRespawnSystem
         }
 
         [TargetRpc]
-        public void TargetUpdateDeathTimer(NetworkConnection target, float respawnTime, bool canRespawn, bool canTimedRespawn, RespawnType activeRespawnType)
+        public void TargetUpdateDeathTimer(
+            NetworkConnection target,
+            float respawnTime,
+            bool canRespawn,
+            bool canTimedRespawn,
+            RespawnType activeRespawnType
+        )
         {
             if (!deathTimerPanel || !PluginConfig.UseDeathTimerUI.Value)
             {
@@ -103,7 +128,8 @@ namespace PlayerRespawnSystem
             {
                 if (canTimedRespawn)
                 {
-                    deathTimerPanel.textContext2.text = $"in <color=red>{Mathf.CeilToInt(respawnTime)}</color> seconds";
+                    deathTimerPanel.textContext2.text =
+                        $"in <color=red>{Mathf.CeilToInt(respawnTime)}</color> seconds";
                     deathTimerPanel.show = true;
                 }
                 else
@@ -113,7 +139,8 @@ namespace PlayerRespawnSystem
                         case RespawnType.Teleporter:
                             if (PluginConfig.RespawnOnTPEnd.Value)
                             {
-                                deathTimerPanel.textContext2.text = $"after <color=red>teleporter</color> event";
+                                deathTimerPanel.textContext2.text =
+                                    $"after <color=red>teleporter</color> event";
                                 deathTimerPanel.show = true;
                             }
                             break;
@@ -121,7 +148,8 @@ namespace PlayerRespawnSystem
                         case RespawnType.Mithrix:
                             if (PluginConfig.RespawnOnMithrixEnd.Value)
                             {
-                                deathTimerPanel.textContext2.text = $"after <color=red>Mithrix</color> fight";
+                                deathTimerPanel.textContext2.text =
+                                    $"after <color=red>Mithrix</color> fight";
                                 deathTimerPanel.show = true;
                             }
                             break;
@@ -129,7 +157,8 @@ namespace PlayerRespawnSystem
                         case RespawnType.Artifact:
                             if (PluginConfig.RespawnOnArtifactTrialEnd.Value)
                             {
-                                deathTimerPanel.textContext2.text = $"after <color=red>artifact trial</color> ends";
+                                deathTimerPanel.textContext2.text =
+                                    $"after <color=red>artifact trial</color> ends";
                                 deathTimerPanel.show = true;
                             }
                             break;

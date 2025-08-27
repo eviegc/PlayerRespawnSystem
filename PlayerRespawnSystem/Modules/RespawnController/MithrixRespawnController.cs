@@ -9,19 +9,26 @@ namespace PlayerRespawnSystem
 
         public void Awake()
         {
-            On.EntityStates.Missions.BrotherEncounter.Phase1.OnEnter += BrotherEncounter_Phase1_OnEnter;
-            On.EntityStates.Missions.BrotherEncounter.EncounterFinished.OnEnter += BrotherEncounter_EncounterFinished_OnEnter;
+            On.EntityStates.Missions.BrotherEncounter.Phase1.OnEnter +=
+                BrotherEncounter_Phase1_OnEnter;
+            On.EntityStates.Missions.BrotherEncounter.EncounterFinished.OnEnter +=
+                BrotherEncounter_EncounterFinished_OnEnter;
             On.RoR2.Run.AdvanceStage += Run_AdvanceStage;
         }
 
         public void OnDestroy()
         {
-            On.EntityStates.Missions.BrotherEncounter.Phase1.OnEnter -= BrotherEncounter_Phase1_OnEnter;
-            On.EntityStates.Missions.BrotherEncounter.EncounterFinished.OnEnter -= BrotherEncounter_EncounterFinished_OnEnter;
+            On.EntityStates.Missions.BrotherEncounter.Phase1.OnEnter -=
+                BrotherEncounter_Phase1_OnEnter;
+            On.EntityStates.Missions.BrotherEncounter.EncounterFinished.OnEnter -=
+                BrotherEncounter_EncounterFinished_OnEnter;
             On.RoR2.Run.AdvanceStage -= Run_AdvanceStage;
         }
 
-        private void BrotherEncounter_Phase1_OnEnter(On.EntityStates.Missions.BrotherEncounter.Phase1.orig_OnEnter orig, EntityStates.Missions.BrotherEncounter.Phase1 self)
+        private void BrotherEncounter_Phase1_OnEnter(
+            On.EntityStates.Missions.BrotherEncounter.Phase1.orig_OnEnter orig,
+            EntityStates.Missions.BrotherEncounter.Phase1 self
+        )
         {
             orig(self);
 
@@ -38,7 +45,10 @@ namespace PlayerRespawnSystem
             }
         }
 
-        private void BrotherEncounter_EncounterFinished_OnEnter(On.EntityStates.Missions.BrotherEncounter.EncounterFinished.orig_OnEnter orig, EntityStates.Missions.BrotherEncounter.EncounterFinished self)
+        private void BrotherEncounter_EncounterFinished_OnEnter(
+            On.EntityStates.Missions.BrotherEncounter.EncounterFinished.orig_OnEnter orig,
+            EntityStates.Missions.BrotherEncounter.EncounterFinished self
+        )
         {
             orig(self);
 
@@ -55,16 +65,27 @@ namespace PlayerRespawnSystem
             IsActive = false;
         }
 
-        private void Run_AdvanceStage(On.RoR2.Run.orig_AdvanceStage orig, RoR2.Run self, RoR2.SceneDef nextScene)
+        private void Run_AdvanceStage(
+            On.RoR2.Run.orig_AdvanceStage orig,
+            RoR2.Run self,
+            RoR2.SceneDef nextScene
+        )
         {
             orig(self, nextScene);
             IsActive = false;
         }
 
-        public override bool GetRespawnTransform(RoR2.CharacterBody body, out Transform outRespawnTransform)
+        public override bool GetRespawnTransform(
+            RoR2.CharacterBody body,
+            out Transform outRespawnTransform
+        )
         {
             Transform respawnTransform = new GameObject().transform;
-            respawnTransform.position = RespawnPosition.GetSpawnPositionAroundMoonBoss(body, 100, 105);
+            respawnTransform.position = RespawnPosition.GetSpawnPositionAroundMoonBoss(
+                body,
+                100,
+                105
+            );
 
             if (respawnTransform.position != Vector3.zero)
             {
@@ -72,7 +93,9 @@ namespace PlayerRespawnSystem
                 return true;
             }
 
-            PlayerRespawnSystemPlugin.Log.LogDebug($"GetRespawnTransform: Failed to find better respawn position for '{GetRespawnType()}' respawn type");
+            PlayerRespawnSystemPlugin.Log.LogDebug(
+                $"GetRespawnTransform: Failed to find better respawn position for '{GetRespawnType()}' respawn type"
+            );
             outRespawnTransform = null;
             return false;
         }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
-using UnityEngine.Networking;
 
 namespace PlayerRespawnSystem
 {
@@ -14,7 +13,7 @@ namespace PlayerRespawnSystem
         Mithrix,
         Artifact,
         Voidling,
-        FalseSon
+        FalseSon,
     }
 
     [AttributeUsage(AttributeTargets.Class, Inherited = false)]
@@ -43,14 +42,17 @@ namespace PlayerRespawnSystem
         public bool IsActive
         {
             get { return isActive; }
-            protected set 
+            protected set
             {
                 if (isActive != value)
                 {
-                    PlayerRespawnSystemPlugin.Log.LogDebug((value ? "Activating" : "Deactivating") + $" {GetRespawnType()} respawn controller");
+                    PlayerRespawnSystemPlugin.Log.LogDebug(
+                        (value ? "Activating" : "Deactivating")
+                            + $" {GetRespawnType()} respawn controller"
+                    );
                     isActive = value;
                 }
-            } 
+            }
         }
 
         protected PlayerRespawner playerRespawner;
@@ -65,7 +67,10 @@ namespace PlayerRespawnSystem
             return GetType().GetCustomAttribute<AssociatedRespawnType>().RespawnType;
         }
 
-        public virtual bool GetRespawnTransform(RoR2.CharacterBody body, out Transform outRespawnTransform)
+        public virtual bool GetRespawnTransform(
+            RoR2.CharacterBody body,
+            out Transform outRespawnTransform
+        )
         {
             outRespawnTransform = null;
             return false;
@@ -74,8 +79,15 @@ namespace PlayerRespawnSystem
         public event IRespawnController.RequestTimedRespawnBlock OnRequestTimedRespawnBlock;
         public event IRespawnController.RequestTimedRespawnBlock OnRequestTimedRespawnUnblock;
 
-        protected void RequestTimedRespawnBlock() { OnRequestTimedRespawnBlock?.Invoke(); }
-        protected void RequestTimedRespawnUnblock() { OnRequestTimedRespawnUnblock?.Invoke(); }
+        protected void RequestTimedRespawnBlock()
+        {
+            OnRequestTimedRespawnBlock?.Invoke();
+        }
+
+        protected void RequestTimedRespawnUnblock()
+        {
+            OnRequestTimedRespawnUnblock?.Invoke();
+        }
 
         // LOL, no virtual static before .Net6 https://learn.microsoft.com/en-us/dotnet/core/compatibility/core-libraries/6.0/static-abstract-interface-methods
         public static bool IsEnabled(Type type)
@@ -88,9 +100,16 @@ namespace PlayerRespawnSystem
         {
             Dictionary<RespawnType, Type> respawnControllers = new Dictionary<RespawnType, Type>();
 
-            foreach (var respawnController in Assembly.GetExecutingAssembly().GetTypes().Where(t => t.GetCustomAttribute<AssociatedRespawnType>() != null))
+            foreach (
+                var respawnController in Assembly
+                    .GetExecutingAssembly()
+                    .GetTypes()
+                    .Where(t => t.GetCustomAttribute<AssociatedRespawnType>() != null)
+            )
             {
-                var respawnType = respawnController.GetCustomAttribute<AssociatedRespawnType>().RespawnType;
+                var respawnType = respawnController
+                    .GetCustomAttribute<AssociatedRespawnType>()
+                    .RespawnType;
                 UnityEngine.Assertions.Assert.IsFalse(respawnControllers.ContainsKey(respawnType));
                 respawnControllers[respawnType] = respawnController;
             }

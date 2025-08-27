@@ -10,18 +10,23 @@ namespace PlayerRespawnSystem
         public void Awake()
         {
             On.RoR2.MeridianEventTriggerInteraction.Start += MeridianEventStart_OnEnter;
-            On.RoR2.MeridianEventTriggerInteraction.TriggerEventClear += MeridianEventCleared_OnEnter;
+            On.RoR2.MeridianEventTriggerInteraction.TriggerEventClear +=
+                MeridianEventCleared_OnEnter;
             On.RoR2.Run.AdvanceStage += Run_AdvanceStage;
         }
 
         public void OnDestroy()
         {
             On.RoR2.MeridianEventTriggerInteraction.Start -= MeridianEventStart_OnEnter;
-            On.RoR2.MeridianEventTriggerInteraction.TriggerEventClear -= MeridianEventCleared_OnEnter;
+            On.RoR2.MeridianEventTriggerInteraction.TriggerEventClear -=
+                MeridianEventCleared_OnEnter;
             On.RoR2.Run.AdvanceStage -= Run_AdvanceStage;
         }
 
-        private void MeridianEventStart_OnEnter(On.RoR2.MeridianEventTriggerInteraction.orig_Start orig, RoR2.MeridianEventTriggerInteraction self)
+        private void MeridianEventStart_OnEnter(
+            On.RoR2.MeridianEventTriggerInteraction.orig_Start orig,
+            RoR2.MeridianEventTriggerInteraction self
+        )
         {
             orig(self);
 
@@ -38,7 +43,10 @@ namespace PlayerRespawnSystem
             }
         }
 
-        private void MeridianEventCleared_OnEnter(On.RoR2.MeridianEventTriggerInteraction.orig_TriggerEventClear orig, RoR2.MeridianEventTriggerInteraction self)
+        private void MeridianEventCleared_OnEnter(
+            On.RoR2.MeridianEventTriggerInteraction.orig_TriggerEventClear orig,
+            RoR2.MeridianEventTriggerInteraction self
+        )
         {
             orig(self);
 
@@ -55,13 +63,20 @@ namespace PlayerRespawnSystem
             IsActive = false;
         }
 
-        private void Run_AdvanceStage(On.RoR2.Run.orig_AdvanceStage orig, RoR2.Run self, RoR2.SceneDef nextScene)
+        private void Run_AdvanceStage(
+            On.RoR2.Run.orig_AdvanceStage orig,
+            RoR2.Run self,
+            RoR2.SceneDef nextScene
+        )
         {
             orig(self, nextScene);
             IsActive = false;
         }
 
-        public override bool GetRespawnTransform(RoR2.CharacterBody body, out Transform outRespawnTransform)
+        public override bool GetRespawnTransform(
+            RoR2.CharacterBody body,
+            out Transform outRespawnTransform
+        )
         {
             Transform respawnTransform = new GameObject().transform;
             respawnTransform.position = RespawnPosition.GetSpawnPositionForStormBoss();
@@ -72,7 +87,9 @@ namespace PlayerRespawnSystem
                 return true;
             }
 
-            PlayerRespawnSystemPlugin.Log.LogDebug($"GetRespawnTransform: Failed to find better respawn position for '{GetRespawnType()}' respawn type");
+            PlayerRespawnSystemPlugin.Log.LogDebug(
+                $"GetRespawnTransform: Failed to find better respawn position for '{GetRespawnType()}' respawn type"
+            );
             outRespawnTransform = null;
             return false;
         }

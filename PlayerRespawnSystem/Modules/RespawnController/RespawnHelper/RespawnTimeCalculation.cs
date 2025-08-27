@@ -14,7 +14,7 @@ namespace PlayerRespawnSystem
         {
             uint respawnTime = PluginConfig.StartingRespawnTime.Value;
 
-            switch(PluginConfig.RespawnTimeType.Value)
+            switch (PluginConfig.RespawnTimeType.Value)
             {
                 case RespawnTimeType.StageTimeBased:
                     respawnTime += RespawnTimeBasedOnPassedStageTime();
@@ -24,22 +24,25 @@ namespace PlayerRespawnSystem
                     break;
             }
 
-            return (uint) UnityEngine.Mathf.Min(respawnTime, PluginConfig.MaxRespawnTime.Value);
+            return (uint)UnityEngine.Mathf.Min(respawnTime, PluginConfig.MaxRespawnTime.Value);
         }
 
         private static uint RespawnTimeBasedOnPassedStageTime()
         {
             var secondsPassed = GameSecondsPassed() - StageEntrySeconds();
-            var updateIntervalsPassed = (secondsPassed / PluginConfig.UpdateCurrentRespawnTimeEveryXSeconds.Value);
+            var updateIntervalsPassed = (
+                secondsPassed / PluginConfig.UpdateCurrentRespawnTimeEveryXSeconds.Value
+            );
 
             return updateIntervalsPassed * PluginConfig.UpdateCurrentRepsawnTimeByXSeconds.Value;
         }
 
-
         private static uint RespawnTimeBasedOnPassedGameTime()
         {
             var secondsPassed = GameSecondsPassed();
-            var updateIntervalsPassed = (secondsPassed / PluginConfig.UpdateCurrentRespawnTimeEveryXSeconds.Value);
+            var updateIntervalsPassed = (
+                secondsPassed / PluginConfig.UpdateCurrentRespawnTimeEveryXSeconds.Value
+            );
 
             return updateIntervalsPassed * PluginConfig.UpdateCurrentRepsawnTimeByXSeconds.Value;
         }

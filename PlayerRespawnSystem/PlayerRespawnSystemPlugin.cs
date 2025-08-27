@@ -1,12 +1,12 @@
-﻿using BepInEx;
+﻿using System.Security.Permissions;
+using BepInEx;
+using BepInEx.Logging;
 using R2API.Utils;
 using UnityEngine;
 using UnityEngine.Networking;
-using System.Security.Permissions;
-using BepInEx.Logging;
 
 #pragma warning disable CS0618 // Type or member is obsolete
-[assembly: SecurityPermission( SecurityAction.RequestMinimum, SkipVerification = true )]
+[assembly: SecurityPermission(SecurityAction.RequestMinimum, SkipVerification = true)]
 
 namespace PlayerRespawnSystem
 {
@@ -29,25 +29,33 @@ namespace PlayerRespawnSystem
         public void Awake()
         {
             Log = Logger;
-            
+
             On.RoR2.NetworkUser.OnEnable += NetworkUser_OnEnable;
             On.RoR2.Run.Awake += Run_Awake;
             On.RoR2.Run.OnDestroy += Run_OnDestroy;
         }
 
-        private void NetworkUser_OnEnable(On.RoR2.NetworkUser.orig_OnEnable orig, RoR2.NetworkUser self)
+        private void NetworkUser_OnEnable(
+            On.RoR2.NetworkUser.orig_OnEnable orig,
+            RoR2.NetworkUser self
+        )
         {
             orig(self);
 
             Logger.LogDebug($"[Client] Adding PlayerUIRpcProxy component to NetworkUser");
-            if (!self.GetComponent<PlayerUIRpcProxy>()) self.gameObject.AddComponent<PlayerUIRpcProxy>();
+            if (!self.GetComponent<PlayerUIRpcProxy>())
+                self.gameObject.AddComponent<PlayerUIRpcProxy>();
         }
 
         private void Run_Awake(On.RoR2.Run.orig_Awake orig, RoR2.Run self)
         {
             orig(self);
 
-            if (PluginConfig.IgnoredGameModes.Value.Contains(RoR2.GameModeCatalog.GetGameModeName(self.gameModeIndex)))
+            if (
+                PluginConfig.IgnoredGameModes.Value.Contains(
+                    RoR2.GameModeCatalog.GetGameModeName(self.gameModeIndex)
+                )
+            )
             {
                 return;
             }
@@ -80,9 +88,12 @@ namespace PlayerRespawnSystem
         {
             orig(self);
 
-            if (uiDeathTimerServer) Destroy(uiDeathTimerServer);
-            if (uiDeathTimerClient) Destroy(uiDeathTimerClient);
-            if (playerRespawnSystem) Destroy(playerRespawnSystem);
+            if (uiDeathTimerServer)
+                Destroy(uiDeathTimerServer);
+            if (uiDeathTimerClient)
+                Destroy(uiDeathTimerClient);
+            if (playerRespawnSystem)
+                Destroy(playerRespawnSystem);
         }
 
         private void InitConfig()

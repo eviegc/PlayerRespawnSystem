@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using RoR2;
+﻿using RoR2;
+using UnityEngine;
 
 namespace PlayerRespawnSystem
 {
@@ -10,19 +10,26 @@ namespace PlayerRespawnSystem
 
         public void Awake()
         {
-            On.RoR2.TeleporterInteraction.ChargingState.OnEnter += TeleporterInteraction_ChargingState_OnEnter;
-            On.RoR2.TeleporterInteraction.ChargedState.OnEnter += TeleporterInteraction_ChargedState_OnEnter;
+            On.RoR2.TeleporterInteraction.ChargingState.OnEnter +=
+                TeleporterInteraction_ChargingState_OnEnter;
+            On.RoR2.TeleporterInteraction.ChargedState.OnEnter +=
+                TeleporterInteraction_ChargedState_OnEnter;
             On.RoR2.Run.AdvanceStage += Run_AdvanceStage;
         }
 
         public void OnDestroy()
         {
-            On.RoR2.TeleporterInteraction.ChargingState.OnEnter -= TeleporterInteraction_ChargingState_OnEnter;
-            On.RoR2.TeleporterInteraction.ChargedState.OnEnter -= TeleporterInteraction_ChargedState_OnEnter;
+            On.RoR2.TeleporterInteraction.ChargingState.OnEnter -=
+                TeleporterInteraction_ChargingState_OnEnter;
+            On.RoR2.TeleporterInteraction.ChargedState.OnEnter -=
+                TeleporterInteraction_ChargedState_OnEnter;
             On.RoR2.Run.AdvanceStage -= Run_AdvanceStage;
         }
 
-        private void TeleporterInteraction_ChargingState_OnEnter(On.RoR2.TeleporterInteraction.ChargingState.orig_OnEnter orig, TeleporterInteraction.ChargingState self)
+        private void TeleporterInteraction_ChargingState_OnEnter(
+            On.RoR2.TeleporterInteraction.ChargingState.orig_OnEnter orig,
+            TeleporterInteraction.ChargingState self
+        )
         {
             orig(self);
 
@@ -43,7 +50,10 @@ namespace PlayerRespawnSystem
             }
         }
 
-        private void TeleporterInteraction_ChargedState_OnEnter(On.RoR2.TeleporterInteraction.ChargedState.orig_OnEnter orig, TeleporterInteraction.ChargedState self)
+        private void TeleporterInteraction_ChargedState_OnEnter(
+            On.RoR2.TeleporterInteraction.ChargedState.orig_OnEnter orig,
+            TeleporterInteraction.ChargedState self
+        )
         {
             orig(self);
 
@@ -60,16 +70,27 @@ namespace PlayerRespawnSystem
             IsActive = false;
         }
 
-        private void Run_AdvanceStage(On.RoR2.Run.orig_AdvanceStage orig, RoR2.Run self, RoR2.SceneDef nextScene)
+        private void Run_AdvanceStage(
+            On.RoR2.Run.orig_AdvanceStage orig,
+            RoR2.Run self,
+            RoR2.SceneDef nextScene
+        )
         {
             orig(self, nextScene);
             IsActive = false;
         }
 
-        public override bool GetRespawnTransform(RoR2.CharacterBody body, out Transform outRespawnTransform)
+        public override bool GetRespawnTransform(
+            RoR2.CharacterBody body,
+            out Transform outRespawnTransform
+        )
         {
             Transform respawnTransform = new GameObject().transform;
-            respawnTransform.position = RespawnPosition.GetSpawnPositionAroundTeleporter(body, 0.5f, 3);
+            respawnTransform.position = RespawnPosition.GetSpawnPositionAroundTeleporter(
+                body,
+                0.5f,
+                3
+            );
 
             if (respawnTransform.position != Vector3.zero)
             {
@@ -77,7 +98,9 @@ namespace PlayerRespawnSystem
                 return true;
             }
 
-            PlayerRespawnSystemPlugin.Log.LogDebug($"GetRespawnTransform: Failed to find better respawn position for '{GetRespawnType()}' respawn type");
+            PlayerRespawnSystemPlugin.Log.LogDebug(
+                $"GetRespawnTransform: Failed to find better respawn position for '{GetRespawnType()}' respawn type"
+            );
             outRespawnTransform = null;
             return false;
         }

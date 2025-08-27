@@ -9,22 +9,33 @@ namespace PlayerRespawnSystem
 
         public void Awake()
         {
-            On.RoR2.ScriptedCombatEncounter.BeginEncounter += ScriptedCombatEncounter_BeginEncounter;
-            On.RoR2.VoidRaidGauntletController.SpawnOutroPortal += VoidRaidGauntletController_SpawnOutroPortal;
+            On.RoR2.ScriptedCombatEncounter.BeginEncounter +=
+                ScriptedCombatEncounter_BeginEncounter;
+            On.RoR2.VoidRaidGauntletController.SpawnOutroPortal +=
+                VoidRaidGauntletController_SpawnOutroPortal;
             On.RoR2.Run.AdvanceStage += Run_AdvanceStage;
         }
 
         public void OnDestroy()
         {
-            On.RoR2.ScriptedCombatEncounter.BeginEncounter -= ScriptedCombatEncounter_BeginEncounter;
-            On.RoR2.VoidRaidGauntletController.SpawnOutroPortal -= VoidRaidGauntletController_SpawnOutroPortal;
+            On.RoR2.ScriptedCombatEncounter.BeginEncounter -=
+                ScriptedCombatEncounter_BeginEncounter;
+            On.RoR2.VoidRaidGauntletController.SpawnOutroPortal -=
+                VoidRaidGauntletController_SpawnOutroPortal;
             On.RoR2.Run.AdvanceStage -= Run_AdvanceStage;
         }
 
-        private void ScriptedCombatEncounter_BeginEncounter(On.RoR2.ScriptedCombatEncounter.orig_BeginEncounter orig, RoR2.ScriptedCombatEncounter self)
+        private void ScriptedCombatEncounter_BeginEncounter(
+            On.RoR2.ScriptedCombatEncounter.orig_BeginEncounter orig,
+            RoR2.ScriptedCombatEncounter self
+        )
         {
             orig(self);
-            if (IsActive || RoR2.SceneCatalog.GetSceneDefForCurrentScene().baseSceneName.ToLower() != "voidraid")
+            if (
+                IsActive
+                || RoR2.SceneCatalog.GetSceneDefForCurrentScene().baseSceneName.ToLower()
+                    != "voidraid"
+            )
             {
                 return;
             }
@@ -42,7 +53,10 @@ namespace PlayerRespawnSystem
             }
         }
 
-        private void VoidRaidGauntletController_SpawnOutroPortal(On.RoR2.VoidRaidGauntletController.orig_SpawnOutroPortal orig, RoR2.VoidRaidGauntletController self)
+        private void VoidRaidGauntletController_SpawnOutroPortal(
+            On.RoR2.VoidRaidGauntletController.orig_SpawnOutroPortal orig,
+            RoR2.VoidRaidGauntletController self
+        )
         {
             orig(self);
 
@@ -59,13 +73,20 @@ namespace PlayerRespawnSystem
             IsActive = false;
         }
 
-        private void Run_AdvanceStage(On.RoR2.Run.orig_AdvanceStage orig, RoR2.Run self, RoR2.SceneDef nextScene)
+        private void Run_AdvanceStage(
+            On.RoR2.Run.orig_AdvanceStage orig,
+            RoR2.Run self,
+            RoR2.SceneDef nextScene
+        )
         {
             orig(self, nextScene);
             IsActive = false;
         }
 
-        public override bool GetRespawnTransform(RoR2.CharacterBody body, out Transform outRespawnTransform)
+        public override bool GetRespawnTransform(
+            RoR2.CharacterBody body,
+            out Transform outRespawnTransform
+        )
         {
             Transform respawnTransform = new GameObject().transform;
             respawnTransform.position = RespawnPosition.GetSpawnPositionForVoidBoss();
@@ -76,7 +97,9 @@ namespace PlayerRespawnSystem
                 return true;
             }
 
-            PlayerRespawnSystemPlugin.Log.LogDebug($"GetRespawnTransform: Failed to find better respawn position for '{GetRespawnType()}' respawn type");
+            PlayerRespawnSystemPlugin.Log.LogDebug(
+                $"GetRespawnTransform: Failed to find better respawn position for '{GetRespawnType()}' respawn type"
+            );
             outRespawnTransform = null;
             return false;
         }

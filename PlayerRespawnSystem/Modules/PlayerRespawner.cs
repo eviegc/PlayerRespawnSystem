@@ -1,7 +1,7 @@
-﻿using RoR2;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using RoR2;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -11,20 +11,25 @@ namespace PlayerRespawnSystem
     {
         public bool IsAdvancingStage { get; set; }
 
-        private Queue<Tuple<RespawnController, CharacterBody>> respawnQueue = new Queue<Tuple<RespawnController, CharacterBody>>();
+        private Queue<Tuple<RespawnController, CharacterBody>> respawnQueue =
+            new Queue<Tuple<RespawnController, CharacterBody>>();
 
         public void RespawnUser(RespawnController respawnController, NetworkUser user)
         {
             if (CheckIfControllerCanRespawn(respawnController, user))
             {
-                if (user.master.bodyPrefab) 
+                if (user.master.bodyPrefab)
                 {
                     CharacterBody body = user.master.bodyPrefab.GetComponent<CharacterBody>();
 
                     if (body)
                     {
-                        PlayerRespawnSystemPlugin.Log.LogDebug($"Issuing {respawnController.GetRespawnType()} respawn");
-                        respawnQueue.Enqueue(new Tuple<RespawnController, CharacterBody>(respawnController, body));
+                        PlayerRespawnSystemPlugin.Log.LogDebug(
+                            $"Issuing {respawnController.GetRespawnType()} respawn"
+                        );
+                        respawnQueue.Enqueue(
+                            new Tuple<RespawnController, CharacterBody>(respawnController, body)
+                        );
                         Stage.instance.RespawnCharacter(user.master);
                     }
                 }
@@ -39,19 +44,22 @@ namespace PlayerRespawnSystem
             }
         }
 
-        public bool CheckIfControllerCanRespawn(RespawnController respawnController, NetworkUser user)
+        public bool CheckIfControllerCanRespawn(
+            RespawnController respawnController,
+            NetworkUser user
+        )
         {
-            return respawnController &&
-                   respawnController.IsActive &&
-                   CheckIfUserCanBeRespawned(user);
+            return respawnController
+                && respawnController.IsActive
+                && CheckIfUserCanBeRespawned(user);
         }
 
         public bool CheckIfUserCanBeRespawned(NetworkUser user)
         {
-            return user &&
-                   user.master &&
-                   user.master.IsDeadAndOutOfLivesServer() &&
-                   !IsAdvancingStage;
+            return user
+                && user.master
+                && user.master.IsDeadAndOutOfLivesServer()
+                && !IsAdvancingStage;
         }
 
         public void Awake()
@@ -66,7 +74,11 @@ namespace PlayerRespawnSystem
             On.RoR2.Stage.GetPlayerSpawnTransform -= Stage_GetPlayerSpawnTransform;
         }
 
-        private void Stage_RespawnCharacter(On.RoR2.Stage.orig_RespawnCharacter orig, Stage self, CharacterMaster characterMaster)
+        private void Stage_RespawnCharacter(
+            On.RoR2.Stage.orig_RespawnCharacter orig,
+            Stage self,
+            CharacterMaster characterMaster
+        )
         {
             if (characterMaster.bodyPrefab)
             {
@@ -83,7 +95,10 @@ namespace PlayerRespawnSystem
         }
 
         // Will be called after Stage_RespawnCharacter
-        private Transform Stage_GetPlayerSpawnTransform(On.RoR2.Stage.orig_GetPlayerSpawnTransform orig, Stage self)
+        private Transform Stage_GetPlayerSpawnTransform(
+            On.RoR2.Stage.orig_GetPlayerSpawnTransform orig,
+            Stage self
+        )
         {
             if (respawnQueue.Count > 0)
             {
@@ -91,13 +106,19 @@ namespace PlayerRespawnSystem
                 var (respawnController, body) = respawnQueue.Dequeue();
                 if (respawnController && body)
                 {
-                    PlayerRespawnSystemPlugin.Log.LogDebug($"Getting respawn position for {respawnController.GetRespawnType()} respawn");
+                    PlayerRespawnSystemPlugin.Log.LogDebug(
+                        $"Getting respawn position for {respawnController.GetRespawnType()} respawn"
+                    );
                     if (respawnController.GetRespawnTransform(body, out Transform respawnTransform))
                     {
-                        PlayerRespawnSystemPlugin.Log.LogDebug($"Found respawn position at {respawnTransform.position}");
+                        PlayerRespawnSystemPlugin.Log.LogDebug(
+                            $"Found respawn position at {respawnTransform.position}"
+                        );
                         return respawnTransform;
                     }
-                    PlayerRespawnSystemPlugin.Log.LogDebug("Failed to find respawn position, using default");
+                    PlayerRespawnSystemPlugin.Log.LogDebug(
+                        "Failed to find respawn position, using default"
+                    );
                 }
             }
 
