@@ -7,7 +7,7 @@
   <PropertyGroup>
     <PluginAuthor>eviegc</PluginAuthor>
     <BepInExPluginName>PlayerRespawnSystem</BepInExPluginName>
-    <BepInExPluginVersion>2.1.3</BepInExPluginVersion>
+    <BepInExPluginVersion>2.1.5</BepInExPluginVersion>
     <BepInExPluginGuid>com.$(PluginAuthor).$(BepInExPluginName)</BepInExPluginGuid>
     <PluginRef>$(PluginAuthor).$(BepInExPluginName)</PluginRef>
   </PropertyGroup>

@@ -4,8 +4,8 @@ schemaVersion = "0.0.1"
 [package]
 namespace = "eviegc"
 name = "PlayerRespawnSystem"
-description = "Allows you to mark items in your inventory that will be automagically scrapped the next time you use a scrapper."
-websiteUrl = "https://github.com/eviegc/MarkForScrap"
+description = "The mod should provide customizable players respawn system for your games."
+websiteUrl = "https://github.com/eviegc/PlayerRespawnSystem"
 containsNsfwContent = false
 
 [package.dependencies]
@@ -33,7 +33,7 @@ target = "PlayerRespawnSystem.pdb"
 repository = "https://thunderstore.io"
 
 [publish]
-communities = [ "riskofrain2" ]
+communities = ["riskofrain2"]
 
 [publish.categories]
-riskofrain2 = [ "mods" ]
+riskofrain2 = ["mods"]

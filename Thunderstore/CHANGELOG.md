@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.1.5
+
+- Fix faulty upload
+
+## 2.1.4
+
+- Small change to reduce logging and make the mod less noisy in console
+
 ## 2.1.3
 
 - Use `nuget` for dependency management
