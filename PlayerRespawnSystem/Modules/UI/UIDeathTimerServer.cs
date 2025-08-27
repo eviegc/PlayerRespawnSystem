@@ -26,9 +26,6 @@ namespace PlayerRespawnSystem
         {
             orig(self);
 
-            PlayerRespawnSystemPlugin.Log.LogDebug(
-                $"[Server] Starting UpdateAllDeathTimers() repeat"
-            );
             InvokeRepeating("UpdateAllDeathTimers", 2.0f, UpdateUIEveryXSeconds);
         }
 
@@ -36,16 +33,11 @@ namespace PlayerRespawnSystem
         {
             orig(self);
 
-            PlayerRespawnSystemPlugin.Log.LogDebug(
-                $"[Server] Ending UpdateAllDeathTimers() repeat"
-            );
             CancelInvoke("UpdateAllDeathTimers");
         }
 
         public void UpdateAllDeathTimers()
         {
-            PlayerRespawnSystemPlugin.Log.LogDebug($"[Server] UpdateAllDeathTimers()");
-
             if (
                 PlayerRespawnSystem.instance
                 && PlayerRespawnSystem.instance.RespawnControllers.ContainsKey(RespawnType.Timed)
@@ -89,10 +81,6 @@ namespace PlayerRespawnSystem
                             bool canRespawn =
                                 PlayerRespawnSystem.instance.CheckIfUserCanBeRespawned(user);
                             bool canTimedRespawn = canRespawn && timedRespawnController.IsActive;
-
-                            PlayerRespawnSystemPlugin.Log.LogDebug(
-                                $"[Server] TargetUpdateDeathTimer(id={user.id.strValue}, respawnTime={respawnTime}, canRespawn={canRespawn}, canTimedRespawn={canTimedRespawn}, activeRespawnType={activeRespawnType})"
-                            );
 
                             user.GetComponent<PlayerUIRpcProxy>()
                                 .TargetUpdateDeathTimer(

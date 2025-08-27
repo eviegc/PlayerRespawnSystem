@@ -13,13 +13,7 @@ namespace PlayerRespawnSystem
             On.RoR2.UI.HUD.Awake += HUD_Awake;
             On.RoR2.Run.OnDestroy += Run_OnDestroy;
 
-            PlayerRespawnSystemPlugin.Log.LogDebug(
-                $"[Client] UIDeathTimerClient enabled, assigning singleton"
-            );
-            UIDeathTimerClient.instance = SingletonHelper.Assign<UIDeathTimerClient>(
-                UIDeathTimerClient.instance,
-                this
-            );
+            instance = SingletonHelper.Assign(instance, this);
         }
 
         public void OnDestroy()
@@ -27,20 +21,12 @@ namespace PlayerRespawnSystem
             On.RoR2.UI.HUD.Awake -= HUD_Awake;
             On.RoR2.Run.OnDestroy -= Run_OnDestroy;
 
-            PlayerRespawnSystemPlugin.Log.LogDebug(
-                $"[Client] UIDeathTimerClient destroyed, unassigning singleton"
-            );
-            UIDeathTimerClient.instance = SingletonHelper.Unassign<UIDeathTimerClient>(
-                UIDeathTimerClient.instance,
-                this
-            );
+            instance = SingletonHelper.Unassign(instance, this);
         }
 
         private void HUD_Awake(On.RoR2.UI.HUD.orig_Awake orig, RoR2.UI.HUD self)
         {
             orig(self);
-
-            PlayerRespawnSystemPlugin.Log.LogDebug($"[Client] HUD is awake, constructing panel");
 
             var go = new GameObject("death_timer_box");
             go.transform.SetParent(self.mainContainer.transform, false);
@@ -52,8 +38,6 @@ namespace PlayerRespawnSystem
         {
             orig(self);
 
-            PlayerRespawnSystemPlugin.Log.LogDebug($"[Client] HUD is destroyed, removing panel");
-
             Destroy(deathTimerPanel);
         }
 
@@ -64,11 +48,9 @@ namespace PlayerRespawnSystem
             RespawnType activeRespawnType
         )
         {
-            PlayerRespawnSystemPlugin.Log.LogDebug($"[Client] Start UpdateDeathTimer()");
-
             if (!deathTimerPanel || !PluginConfig.UseDeathTimerUI.Value)
             {
-                PlayerRespawnSystemPlugin.Log.LogDebug(
+                PlayerRespawnSystemPlugin.Log.LogWarning(
                     $"[Client] deathTimerPanel cannot be updated"
                 );
                 return;
@@ -122,10 +104,6 @@ namespace PlayerRespawnSystem
             {
                 deathTimerPanel.show = false;
             }
-
-            PlayerRespawnSystemPlugin.Log.LogDebug(
-                $"[Client] deathTimerPanel.show = {deathTimerPanel.show}"
-            );
         }
     }
 }

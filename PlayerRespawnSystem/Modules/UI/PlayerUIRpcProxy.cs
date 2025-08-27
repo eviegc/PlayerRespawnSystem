@@ -13,20 +13,20 @@ namespace PlayerRespawnSystem
             RespawnType activeRespawnType
         )
         {
-            PlayerRespawnSystemPlugin.Log.LogDebug(
-                $"[ClientRPC] Starting TargetUpdateDeathTimer()"
-            );
+            // PlayerRespawnSystemPlugin.Log.LogDebug(
+            //     $"[ClientRPC] Starting TargetUpdateDeathTimer()"
+            // );
 
             var panel = UIDeathTimerClient.instance;
             if (!panel)
             {
-                PlayerRespawnSystemPlugin.Log.LogDebug(
+                PlayerRespawnSystemPlugin.Log.LogWarning(
                     $"[ClientRPC] Could not find singleton panel, exiting"
                 );
                 return;
             }
 
-            PlayerRespawnSystemPlugin.Log.LogDebug($"[ClientRPC] Updating panel");
+            // PlayerRespawnSystemPlugin.Log.LogDebug($"[ClientRPC] Updating panel");
             panel.UpdateDeathTimer(respawnTime, canRespawn, canTimedRespawn, activeRespawnType);
         }
     }
