@@ -9,19 +9,19 @@ namespace PlayerRespawnSystem
 
         public void Awake()
         {
-            On.RoR2.MeridianEventTriggerInteraction.MeridianEventStart.OnEnter += MeridianEventStart_OnEnter;
-            On.RoR2.MeridianEventTriggerInteraction.MeridianEventCleared.OnEnter += MeridianEventCleared_OnEnter;
+            On.RoR2.MeridianEventTriggerInteraction.Start += MeridianEventStart_OnEnter;
+            On.RoR2.MeridianEventTriggerInteraction.TriggerEventClear += MeridianEventCleared_OnEnter;
             On.RoR2.Run.AdvanceStage += Run_AdvanceStage;
         }
 
         public void OnDestroy()
         {
-            On.RoR2.MeridianEventTriggerInteraction.MeridianEventStart.OnEnter -= MeridianEventStart_OnEnter;
-            On.RoR2.MeridianEventTriggerInteraction.MeridianEventCleared.OnEnter -= MeridianEventCleared_OnEnter;
+            On.RoR2.MeridianEventTriggerInteraction.Start -= MeridianEventStart_OnEnter;
+            On.RoR2.MeridianEventTriggerInteraction.TriggerEventClear -= MeridianEventCleared_OnEnter;
             On.RoR2.Run.AdvanceStage -= Run_AdvanceStage;
         }
 
-        private void MeridianEventStart_OnEnter(On.RoR2.MeridianEventTriggerInteraction.MeridianEventStart.orig_OnEnter orig, RoR2.MeridianEventTriggerInteraction.MeridianEventStart self)
+        private void MeridianEventStart_OnEnter(On.RoR2.MeridianEventTriggerInteraction.orig_Start orig, RoR2.MeridianEventTriggerInteraction self)
         {
             orig(self);
 
@@ -38,7 +38,7 @@ namespace PlayerRespawnSystem
             }
         }
 
-        private void MeridianEventCleared_OnEnter(On.RoR2.MeridianEventTriggerInteraction.MeridianEventCleared.orig_OnEnter orig, RoR2.MeridianEventTriggerInteraction.MeridianEventCleared self)
+        private void MeridianEventCleared_OnEnter(On.RoR2.MeridianEventTriggerInteraction.orig_TriggerEventClear orig, RoR2.MeridianEventTriggerInteraction self)
         {
             orig(self);
 

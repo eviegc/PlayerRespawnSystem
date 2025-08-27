@@ -37,7 +37,7 @@ namespace PlayerRespawnSystem
         public event RequestTimedRespawnBlock OnRequestTimedRespawnUnblock;
     }
 
-    abstract class RespawnController : NetworkBehaviour, IRespawnController
+    abstract class RespawnController : MonoBehaviour, IRespawnController
     {
         private bool isActive = false;
         public bool IsActive

@@ -1,8 +1,9 @@
-﻿using UnityEngine.Networking;
+﻿using UnityEngine;
+using UnityEngine.Networking;
 
 namespace PlayerRespawnSystem
 {
-    class UserTimer : NetworkBehaviour
+    class UserTimer : MonoBehaviour
     {
         public RoR2.NetworkUserId UserId { get; set; }
 

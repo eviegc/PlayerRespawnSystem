@@ -7,7 +7,7 @@ using UnityEngine.Networking;
 
 namespace PlayerRespawnSystem
 {
-    class PlayerRespawner : NetworkBehaviour
+    class PlayerRespawner : MonoBehaviour
     {
         public bool IsAdvancingStage { get; set; }
 

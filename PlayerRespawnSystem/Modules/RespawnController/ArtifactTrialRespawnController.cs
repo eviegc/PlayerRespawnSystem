@@ -1,4 +1,6 @@
-﻿namespace PlayerRespawnSystem
+﻿using RoR2;
+
+namespace PlayerRespawnSystem
 {
     [AssociatedRespawnType(RespawnType.Artifact)]
     class ArtifactTrialRespawnController : RespawnController
@@ -19,7 +21,7 @@
             On.RoR2.Run.AdvanceStage -= Run_AdvanceStage;
         }
 
-        private void ArtifactTrialMissionController_CombatState_OnEnter(On.RoR2.ArtifactTrialMissionController.CombatState.orig_OnEnter orig, EntityStates.EntityState self)
+        private void ArtifactTrialMissionController_CombatState_OnEnter(On.RoR2.ArtifactTrialMissionController.CombatState.orig_OnEnter orig, ArtifactTrialMissionController.CombatState self)
         {
             orig(self);
 
@@ -36,7 +38,7 @@
             }
         }
 
-        private void CombatState_OnExit(On.RoR2.ArtifactTrialMissionController.CombatState.orig_OnExit orig, EntityStates.EntityState self)
+        private void CombatState_OnExit(On.RoR2.ArtifactTrialMissionController.CombatState.orig_OnExit orig, ArtifactTrialMissionController.CombatState self)
         {
             orig(self);
 

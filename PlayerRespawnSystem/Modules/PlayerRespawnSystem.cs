@@ -1,10 +1,11 @@
 ﻿using RoR2;
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Networking;
 
 namespace PlayerRespawnSystem
 {
-    class PlayerRespawnSystem : NetworkBehaviour
+    class PlayerRespawnSystem : MonoBehaviour
     {
         public static PlayerRespawnSystem instance { get; private set; }
 

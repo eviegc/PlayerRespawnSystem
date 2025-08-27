@@ -1,24 +1,23 @@
 ﻿using BepInEx;
-using R2API;
 using R2API.Utils;
 using UnityEngine;
 using UnityEngine.Networking;
+using System.Security.Permissions;
+
+#pragma warning disable CS0618 // Type or member is obsolete
+[assembly: SecurityPermission( SecurityAction.RequestMinimum, SkipVerification = true )]
 
 namespace PlayerRespawnSystem
 {
     [BepInDependency("com.bepis.r2api")]
     [NetworkCompatibility(CompatibilityLevel.NoNeedForSync)]
-    [BepInPlugin(ModGuid, ModName, ModVer)]
+    [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
     public class PlayerRespawnSystemPlugin : BaseUnityPlugin
     {
-        public const string ModVer = "2.1.2";
-        public const string ModName = "PlayerRespawnSystem";
-        public const string ModGuid = "com.Mordrog.PlayerRespawnSystem";
-
         private PlayerRespawnSystem playerRespawnSystem;
 
-        private static GameObject uiDeathTimerControllerPrefab;
-        private GameObject uiDeathTimerController;
+        private GameObject uiDeathTimerServer;
+        private GameObject uiDeathTimerClient;
 
         public PlayerRespawnSystemPlugin()
         {
@@ -27,13 +26,6 @@ namespace PlayerRespawnSystem
 
         public void Awake()
         {
-            //Create prefab
-            var temp = new GameObject("temp");
-            temp.AddComponent<NetworkIdentity>();
-            uiDeathTimerControllerPrefab = temp.InstantiateClone("UIDeathTimerController");
-            Destroy(temp);
-            uiDeathTimerControllerPrefab.AddComponent<UIDeathTimerController>();
-
             On.RoR2.NetworkUser.OnEnable += NetworkUser_OnEnable;
             On.RoR2.Run.Awake += Run_Awake;
             On.RoR2.Run.OnDestroy += Run_OnDestroy;
@@ -43,11 +35,8 @@ namespace PlayerRespawnSystem
         {
             orig(self);
 
-            if (!uiDeathTimerController)
-            {
-                uiDeathTimerController = Instantiate(uiDeathTimerControllerPrefab);
-                uiDeathTimerController.transform.SetParent(self.transform, false);
-            }
+            UnityEngine.Debug.Log($"PlayerRespawnSystem: [Client] Adding PlayerUIRpcProxy component to NetworkUser");
+            if (!self.GetComponent<PlayerUIRpcProxy>()) self.gameObject.AddComponent<PlayerUIRpcProxy>();
         }
 
         private void Run_Awake(On.RoR2.Run.orig_Awake orig, RoR2.Run self)
@@ -59,13 +48,27 @@ namespace PlayerRespawnSystem
                 return;
             }
 
-            uiDeathTimerController.SetActive(true);
+            // Client-side init
+            if (NetworkClient.active)
+            {
+                // TODO what object/parent do we attach this to?
+                UnityEngine.Debug.Log($"PlayerRespawnSystem: [Client] Creating UIDeathTimerClient");
+                uiDeathTimerClient = new GameObject("death_timer_client");
+                uiDeathTimerClient.transform.SetParent(self.transform, false);
+                uiDeathTimerClient.AddComponent<UIDeathTimerClient>();
+            }
 
-            playerRespawnSystem = gameObject.AddComponent<PlayerRespawnSystem>();
-
+            // Server-side init
             if (NetworkServer.active)
             {
-                NetworkServer.Spawn(uiDeathTimerController);
+                UnityEngine.Debug.Log($"PlayerRespawnSystem: [Server] Creating PlayerRespawnSystem");
+                playerRespawnSystem = gameObject.AddComponent<PlayerRespawnSystem>();
+
+                UnityEngine.Debug.Log($"PlayerRespawnSystem: [Server] Creating UIDeathTimerServer");
+                uiDeathTimerServer = new GameObject("death_timer_server");
+                uiDeathTimerServer.transform.SetParent(self.transform, false);
+                uiDeathTimerServer.AddComponent<UIDeathTimerServer>();
+                uiDeathTimerServer.SetActive(true);
             }
         }
 
@@ -73,20 +76,9 @@ namespace PlayerRespawnSystem
         {
             orig(self);
 
-            if (uiDeathTimerController)
-            {
-                uiDeathTimerController.SetActive(false);
-            }
-
-            if (playerRespawnSystem)
-            {
-                Destroy(playerRespawnSystem);
-            }
-
-            if (NetworkServer.active && uiDeathTimerController)
-            {
-                NetworkServer.UnSpawn(uiDeathTimerController);
-            }
+            if (uiDeathTimerServer) Destroy(uiDeathTimerServer);
+            if (uiDeathTimerClient) Destroy(uiDeathTimerClient);
+            if (playerRespawnSystem) Destroy(playerRespawnSystem);
         }
 
         private void InitConfig()

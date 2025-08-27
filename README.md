@@ -1,4 +1,7 @@
 # RoR2-PlayerRespawnSystem
+
+**NOTE:** This is a fork of [RoR2-PlayerRespawnSystem](https://thunderstore.io/package/Mordrog/PlayerRespawnSystem/) to fix some errors encountered on various respawn events (e.g. respawning when a teleporter is triggered) and UI death timer RPC issues.
+
 RoR2 mod - provides customizable players respawn system for your games
 
 Mod will provide respawn system which can be configured to your play style. It allows for time respawn, respawn on start of teleporter event, respawn on end of teleporter event. 
@@ -44,6 +47,10 @@ Mod should now add new Death Timer panel when you die, so you will know exactly 
 Find my other mods here: https://thunderstore.io/package/Mordrog/
 
 ### Changelog
+#### 2.1.3
+- Use `nuget` for dependency management
+- Fix `MethodAccessException` and some death timer UI `rpc` errors with a rebuild
+
 #### 2.1.2
 - Make event respawns always getting deactivated on stage being advanced
 
