@@ -55,7 +55,7 @@ namespace PlayerRespawnSystem
             {
                 if (RespawnController.IsEnabled(respawnControllerType))
                 {
-                    UnityEngine.Debug.Log($"PlayerRespawnSystem: Enabling {respawnType} respawn controller");
+                    PlayerRespawnSystemPlugin.Log.LogDebug($"Enabling {respawnType} respawn controller");
                     respawnControllers[respawnType] = (RespawnController)gameObject.AddComponent(respawnControllerType);
                     respawnControllers[respawnType].Init(playerRespawner);
                     respawnControllers[respawnType].OnRequestTimedRespawnBlock += BlockTimedRespawn;

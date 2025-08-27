@@ -52,7 +52,7 @@ namespace PlayerRespawnSystem
 
             if (gauntletIndexField == null || initialDonutField == null || followingDonutsField == null)
             {
-                Debug.LogWarning("Failed to find VoidRaidGauntletController field");
+                PlayerRespawnSystemPlugin.Log.LogWarning("Failed to find VoidRaidGauntletController field");
                 return Vector3.zero;
             }
 
@@ -64,7 +64,7 @@ namespace PlayerRespawnSystem
                 currentDonut = initialDonutField.GetValue(RoR2.VoidRaidGauntletController.instance) as RoR2.VoidRaidGauntletController.DonutInfo;
                 if (currentDonut == null)
                 {
-                    Debug.LogWarning("Failed to get VoidRaidGauntletController::initialDonut field");
+                    PlayerRespawnSystemPlugin.Log.LogWarning("Failed to get VoidRaidGauntletController::initialDonut field");
                     return Vector3.zero;
                 }
             }
@@ -73,7 +73,7 @@ namespace PlayerRespawnSystem
                 var followingDonuts = followingDonutsField.GetValue(RoR2.VoidRaidGauntletController.instance) as RoR2.VoidRaidGauntletController.DonutInfo[];
                 if (followingDonuts == null)
                 {
-                    Debug.LogWarning("Failed to get VoidRaidGauntletController::followingDonuts field");
+                    PlayerRespawnSystemPlugin.Log.LogWarning("Failed to get VoidRaidGauntletController::followingDonuts field");
                     return Vector3.zero;
                 }
 

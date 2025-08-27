@@ -26,7 +26,7 @@ namespace PlayerRespawnSystem
         {
             orig(self);
 
-            UnityEngine.Debug.Log($"PlayerRespawnSystem: [Server] Starting UpdateAllDeathTimers() repeat");
+            PlayerRespawnSystemPlugin.Log.LogDebug($"[Server] Starting UpdateAllDeathTimers() repeat");
             InvokeRepeating("UpdateAllDeathTimers", 2.0f, UpdateUIEveryXSeconds);
         }
 
@@ -34,13 +34,13 @@ namespace PlayerRespawnSystem
         {
             orig(self);
 
-            UnityEngine.Debug.Log($"PlayerRespawnSystem: [Server] Ending UpdateAllDeathTimers() repeat");
+            PlayerRespawnSystemPlugin.Log.LogDebug($"[Server] Ending UpdateAllDeathTimers() repeat");
             CancelInvoke("UpdateAllDeathTimers");
         }
 
         public void UpdateAllDeathTimers()
         {
-            UnityEngine.Debug.Log($"PlayerRespawnSystem: [Server] UpdateAllDeathTimers()");
+            PlayerRespawnSystemPlugin.Log.LogDebug($"[Server] UpdateAllDeathTimers()");
 
             if (PlayerRespawnSystem.instance && PlayerRespawnSystem.instance.RespawnControllers.ContainsKey(RespawnType.Timed))
             {
@@ -71,8 +71,8 @@ namespace PlayerRespawnSystem
                             float respawnTime = userTimer.TimeRemaining;
                             bool canRespawn = PlayerRespawnSystem.instance.CheckIfUserCanBeRespawned(user);
                             bool canTimedRespawn = canRespawn && timedRespawnController.IsActive;
-                           
-                            UnityEngine.Debug.Log($"PlayerRespawnSystem: [Server] TargetUpdateDeathTimer(id={user.id.strValue}, respawnTime={respawnTime}, canRespawn={canRespawn}, canTimedRespawn={canTimedRespawn}, activeRespawnType={activeRespawnType})");
+
+                            PlayerRespawnSystemPlugin.Log.LogDebug($"[Server] TargetUpdateDeathTimer(id={user.id.strValue}, respawnTime={respawnTime}, canRespawn={canRespawn}, canTimedRespawn={canTimedRespawn}, activeRespawnType={activeRespawnType})");
 
                             user.GetComponent<PlayerUIRpcProxy>().TargetUpdateDeathTimer(conn, respawnTime, canRespawn, canTimedRespawn, activeRespawnType);
                         }

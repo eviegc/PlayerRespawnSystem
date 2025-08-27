@@ -47,7 +47,7 @@ namespace PlayerRespawnSystem
             {
                 if (isActive != value)
                 {
-                    UnityEngine.Debug.Log($"PlayerRespawnSystem: " + (value ? "Activating" : "Deactivating") + $" {GetRespawnType()} respawn controller");
+                    PlayerRespawnSystemPlugin.Log.LogDebug((value ? "Activating" : "Deactivating") + $" {GetRespawnType()} respawn controller");
                     isActive = value;
                 }
             } 

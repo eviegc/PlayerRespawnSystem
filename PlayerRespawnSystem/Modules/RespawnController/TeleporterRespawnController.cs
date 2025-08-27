@@ -77,7 +77,7 @@ namespace PlayerRespawnSystem
                 return true;
             }
 
-            Debug.Log($"GetRespawnTransform: Failed to find better respawn position for '{GetRespawnType()}' respawn type");
+            PlayerRespawnSystemPlugin.Log.LogDebug($"GetRespawnTransform: Failed to find better respawn position for '{GetRespawnType()}' respawn type");
             outRespawnTransform = null;
             return false;
         }

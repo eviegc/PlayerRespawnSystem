@@ -3,6 +3,7 @@ using R2API.Utils;
 using UnityEngine;
 using UnityEngine.Networking;
 using System.Security.Permissions;
+using BepInEx.Logging;
 
 #pragma warning disable CS0618 // Type or member is obsolete
 [assembly: SecurityPermission( SecurityAction.RequestMinimum, SkipVerification = true )]
@@ -14,6 +15,7 @@ namespace PlayerRespawnSystem
     [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
     public class PlayerRespawnSystemPlugin : BaseUnityPlugin
     {
+        internal static ManualLogSource Log;
         private PlayerRespawnSystem playerRespawnSystem;
 
         private GameObject uiDeathTimerServer;
@@ -26,6 +28,8 @@ namespace PlayerRespawnSystem
 
         public void Awake()
         {
+            Log = Logger;
+            
             On.RoR2.NetworkUser.OnEnable += NetworkUser_OnEnable;
             On.RoR2.Run.Awake += Run_Awake;
             On.RoR2.Run.OnDestroy += Run_OnDestroy;
@@ -35,7 +39,7 @@ namespace PlayerRespawnSystem
         {
             orig(self);
 
-            UnityEngine.Debug.Log($"PlayerRespawnSystem: [Client] Adding PlayerUIRpcProxy component to NetworkUser");
+            Logger.LogDebug($"[Client] Adding PlayerUIRpcProxy component to NetworkUser");
             if (!self.GetComponent<PlayerUIRpcProxy>()) self.gameObject.AddComponent<PlayerUIRpcProxy>();
         }
 
@@ -52,7 +56,7 @@ namespace PlayerRespawnSystem
             if (NetworkClient.active)
             {
                 // TODO what object/parent do we attach this to?
-                UnityEngine.Debug.Log($"PlayerRespawnSystem: [Client] Creating UIDeathTimerClient");
+                Logger.LogDebug($"[Client] Creating UIDeathTimerClient");
                 uiDeathTimerClient = new GameObject("death_timer_client");
                 uiDeathTimerClient.transform.SetParent(self.transform, false);
                 uiDeathTimerClient.AddComponent<UIDeathTimerClient>();
@@ -61,10 +65,10 @@ namespace PlayerRespawnSystem
             // Server-side init
             if (NetworkServer.active)
             {
-                UnityEngine.Debug.Log($"PlayerRespawnSystem: [Server] Creating PlayerRespawnSystem");
+                Logger.LogDebug($"[Server] Creating PlayerRespawnSystem");
                 playerRespawnSystem = gameObject.AddComponent<PlayerRespawnSystem>();
 
-                UnityEngine.Debug.Log($"PlayerRespawnSystem: [Server] Creating UIDeathTimerServer");
+                Logger.LogDebug($"[Server] Creating UIDeathTimerServer");
                 uiDeathTimerServer = new GameObject("death_timer_server");
                 uiDeathTimerServer.transform.SetParent(self.transform, false);
                 uiDeathTimerServer.AddComponent<UIDeathTimerServer>();
