@@ -1,0 +1,39 @@
+[config]
+schemaVersion = "0.0.1"
+
+[package]
+namespace = "eviegc"
+name = "PlayerRespawnSystem"
+description = "Allows you to mark items in your inventory that will be automagically scrapped the next time you use a scrapper."
+websiteUrl = "https://github.com/eviegc/MarkForScrap"
+containsNsfwContent = false
+
+[package.dependencies]
+bbepis-BepInExPack = "5.4.2121"
+RiskofThunder-R2API_Prefab = "1.0.4"
+
+[build]
+icon = "icon.png"
+readme = "README.md"
+outdir = "build"
+
+[[build.copy]]
+source = "CHANGELOG.md"
+target = "CHANGELOG.md"
+
+[[build.copy]]
+source = "../PlayerRespawnSystem/bin/Release/netstandard2.1/Patched/PlayerRespawnSystem.dll"
+target = "PlayerRespawnSystem.dll"
+
+[[build.copy]]
+source = "../PlayerRespawnSystem/bin/Release/netstandard2.1/Patched/PlayerRespawnSystem.pdb"
+target = "PlayerRespawnSystem.pdb"
+
+[general]
+repository = "https://thunderstore.io"
+
+[publish]
+communities = [ "riskofrain2" ]
+
+[publish.categories]
+riskofrain2 = [ "mods" ]
