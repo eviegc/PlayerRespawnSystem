@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.2.0
+
+- Update for Alloyed Collective DLC
+
 ## 2.1.5
 
 - Fix faulty upload
